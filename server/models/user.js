@@ -19,8 +19,7 @@ const userSchema = new Schema(
           message: "Not a valid email"
         })
       ]
-    },
-    role: String
+    }
   },
   { timestamps: true }
 );
