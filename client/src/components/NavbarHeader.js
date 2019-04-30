@@ -92,3 +92,5 @@ export default class NavbarHeader extends React.Component {
     );
   }
 }
+
+export default NavbarHeader;
