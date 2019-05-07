@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^4.3.1",
     "chalk": "^2.4.2",
     "express": "^4.16.4",
     "mongoose": "^5.5.1",
