@@ -19,7 +19,7 @@ passport.deserializeUser((userIdFromSession, cb) => {
 });
 
 passport.use(
-  new LocalStrategy({ usernameField: "email" }, (email, password, next) => {
+  new LocalStrategy({ nameField: "email" }, (email, password, next) => {
     User.findOne({ email }, (err, foundUser) => {
       console.log("PASSPORT STRATEGY", email, password, foundUser);
       if (err) {
@@ -28,7 +28,7 @@ passport.use(
       }
 
       if (!foundUser) {
-        next(null, false, { message: "Incorrect username." });
+        next(null, false, { message: "Incorrect name." });
         return;
       }
 

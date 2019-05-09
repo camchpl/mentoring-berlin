@@ -61,12 +61,40 @@ authRoutes.post("/register-signup", (req, res, next) => {
       res.status(500).json({ message: "Login after signup didn't work" });
       return;
     }
-
     res.status(200).json(aNewUser);
   });
 });
 
 // - Login - //
+authRoutes.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, theUser, failureDetails) => {
+    if (err) {
+      res
+        .status(500)
+        .json({ message: "Something went wrong with your authentication" });
+      return;
+    }
+
+    if (!theUser) {
+      // "failureDetails" contains the error messages
+      // from our logic in "LocalStrategy" { message: '...' }.
+      res.status(401).json(failureDetails);
+      return;
+    }
+
+    // save user in session
+    req.login(theUser, err => {
+      if (err) {
+        res.status(500).json({ message: "Session save didn't work" });
+        return;
+      }
+
+      // We are now logged in (that's why we can also send req.user)
+      res.status(200).json(theUser);
+    });
+  })(req, res, next);
+});
+
 
 // - Log out - //
 authRoutes.post("/logout", (req, res, next) => {

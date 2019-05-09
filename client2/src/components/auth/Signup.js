@@ -1,31 +1,55 @@
 import React, { Component } from "react";
-import AuthService from "./auth-service";
-import { Link } from "react-router-dom";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
+import { Link, Redirect } from "react-router-dom";
+import AuthService from "./AuthService";
+import { Alert } from "reactstrap";
+import { Container, Row, Card, CardBody, Col } from "reactstrap";
 
 class Signup extends Component {
   constructor(props) {
     super(props);
-    this.state = { name: "", password: "" };
+    this.state = {
+      username: "",
+      password: "",
+      email: "",
+      redirect: false,
+      errorMessage: ""
+    };
     this.service = new AuthService();
   }
 
+  setRedirect = () => {
+    this.setState({
+      redirect: true
+    });
+  };
+  renderRedirect = () => {
+    if (this.state.redirect) {
+      return <Redirect to="/" />;
+    }
+  };
+
   handleFormSubmit = event => {
     event.preventDefault();
-    const username = this.state.name;
-    const password = this.state.password;
 
+    const { username, password, email } = this.state;
     this.service
-      .signup(name, password)
+      .signup(username, password, email)
       .then(response => {
         this.setState({
-          name: "",
-          password: ""
+          username: "",
+          password: "",
+          firstname: "",
+          lastname: "",
+          email: ""
         });
-        this.props.getUser(response);
+        this.props.setUser(response);
+        this.setRedirect();
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.log(error.response);
+        this.setState({ errorMessage: error.response.data.message });
+        console.log(error);
+      });
   };
 
   handleChange = event => {
@@ -35,47 +59,88 @@ class Signup extends Component {
 
   render() {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-3" />
-          <div className="col-6">
-            <h4 className="signup-manufacturer-title">
-              Register as a <br /> manufacturer
-            </h4>
-            <Form onSubmit={this.handleFormSubmit}>
-              <Form.Group controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  size="sm"
-                  type="email"
-                  placeholder="Enter email"
-                  name="name"
-                  value={this.state.username}
-                  onChange={e => this.handleChange(e)}
-                />
-                <Form.Text className="text-muted">
-                  We'll never share your email with anyone else.
-                </Form.Text>
-              </Form.Group>
-              <Form.Group controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  size="sm"
-                  type="password"
-                  placeholder="Password"
-                  name="password"
-                  value={this.state.password}
-                  onChange={e => this.handleChange(e)}
-                />
-                <Form.Text className="text-muted">
-                  Your password has to be 8 character long at least
-                </Form.Text>
-              </Form.Group>
-              <input className="btn btn-primary" type="submit" value="Signup" />
-            </Form>
-          </div>
-          <div className="col-3" />
-        </div>
+      <div>
+        {this.renderRedirect()}
+        <Container>
+          <Row className="mt-3 text-center">
+            <Col>
+              <Card className="shadow flex-row">
+                <CardBody>
+                  <h2>Create your account</h2>
+                  <form
+                    className="form-signin"
+                    onSubmit={this.handleFormSubmit}
+                  >
+                    <div className="form-group">
+                      <label>First name:</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="firstname"
+                        value={this.state.firstname}
+                        onChange={e => this.handleChange(e)}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Last name:</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="lastname"
+                        value={this.state.lastname}
+                        onChange={e => this.handleChange(e)}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Username:</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="username"
+                        value={this.state.username}
+                        onChange={e => this.handleChange(e)}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Email:</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="email"
+                        value={this.state.email}
+                        onChange={e => this.handleChange(e)}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Password:</label>
+                      <input
+                        type="password"
+                        className="form-control"
+                        name="password"
+                        value={this.state.password}
+                        onChange={e => this.handleChange(e)}
+                      />
+                    </div>
+                    <button
+                      className="btn btn-lg btn-primary btn-block"
+                      type="submit"
+                    >
+                      Register
+                    </button>
+                  </form>
+                  <hr />
+                  {this.state.errorMessage && (
+                    <Alert color="warning">{this.state.errorMessage}</Alert>
+                  )}
+                  <p>
+                    Already have an account? <br />
+                    <Link to={"/login"}>Login</Link>
+                  </p>
+                </CardBody>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
       </div>
     );
   }
