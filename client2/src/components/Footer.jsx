@@ -37,9 +37,7 @@ const Footer = () => {
                 <a href="#!">Press</a>
               </li>
             </ul>
-            <div className="footer-copyright">
-              © 2019 Viragos - Made in Berlin
-            </div>
+            <div className="footer-copyright">© 2019 - Made in Berlin</div>
           </MDBCol>
           <MDBCol md="3" />
         </MDBRow>

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import AuthService from "./AuthService.js";
 import { Alert } from "reactstrap";
-import { Container, Row, Card, CardBody, CardImg, Col } from "reactstrap";
+import { Container, Row, Card, CardBody, Col } from "reactstrap";
 
 class Login extends Component {
   constructor(props) {
