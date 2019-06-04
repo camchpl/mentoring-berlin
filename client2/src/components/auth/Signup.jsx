@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
-import AuthService from "./AuthService";
+import AuthService from "./auth-service";
 import { Alert } from "reactstrap";
 import { Container, Row, Card, CardBody, Col } from "reactstrap";
 
